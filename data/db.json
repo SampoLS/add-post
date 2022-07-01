@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "name": "tom",
+      "quotes": "yahhoo~"
+    },
+    {
+      "id": 2,
+      "name": "jerry",
+      "quotes": "tom is my best friend."
+    },
+    {
+      "id": 3,
+      "name": "spike",
+      "quotes": "Who wakes me up?"
+    }
+  ]
+}
