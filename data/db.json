@@ -3,17 +3,22 @@
     {
       "id": 1,
       "name": "tom",
-      "quotes": "yahhoo~"
+      "quotes": "Yooo~~~"
     },
     {
       "id": 2,
       "name": "jerry",
-      "quotes": "tom is my best friend."
+      "quotes": "catch me as you can, tom"
     },
     {
       "id": 3,
       "name": "spike",
-      "quotes": "Who wakes me up?"
+      "quotes": "who wakes me up???"
+    },
+    {
+      "id": 4,
+      "name": "tooddle",
+      "quotes": "where's my lover?"
     }
   ]
 }

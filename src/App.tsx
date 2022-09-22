@@ -1,97 +1,48 @@
-import { useState } from "react"
-import styled from "styled-components"
-import {
-  useGetPostsQuery,
-  useAddPostMutation,
-  useDeletePostMutation,
-  useUpdatePostMutation
-} from "./api/posts"
+import { useState } from "react";
+import styled from "styled-components";
+import { useGetPostsQuery, useAddPostMutation } from "./api/posts";
 
-import SharedPost from "./components/SharedPost"
+import SharedPost from "./components/SharedPost";
+import Post from "./components/Post";
 
-interface Post {
+interface TPost {
   id: number;
   name: string;
   quotes: string;
 }
 
-interface IsEditing {
-  [id: number]: boolean
-}
-
 export default function App() {
-  const [name, setName] = useState('')
-  const [quotes, setQuotes] = useState('')
-  const [isEditing, setIsEditing] = useState<IsEditing>({0: false})
+  const [name, setName] = useState("");
+  const [quotes, setQuotes] = useState("");
 
-  const { data: posts, refetch } = useGetPostsQuery('')
-  const [addPost] = useAddPostMutation()
-  const [deletePost] = useDeletePostMutation()
-  const [updatePost] = useUpdatePostMutation()
+  const [addPost] = useAddPostMutation();
+  const { data: posts, refetch } = useGetPostsQuery("");
 
   const onAddPost = async () => {
     await addPost({
       name,
       quotes,
-    })
-    refetch()
-    setName('')
-    setQuotes('')
-  }
+    });
+    refetch();
+    setName("");
+    setQuotes("");
+  };
 
-  const onDeletePost = async (id: number) => {
-    await deletePost(id)
-    refetch()
-  }
-
-  const onEditPost = (id: number, post: Post) => {
-    const { name, quotes } = post
-    setIsEditing(() => {
-      return {
-        [id]: true
-      }
-    })
-    setName(name)
-    setQuotes(quotes)
-  }
-
-  const onUpdatePost = async (post: Post) => {
-    const { id } = post
-    setIsEditing(() => {
-      return {
-        [id]: false
-      }
-    })
-    await updatePost({id, name, quotes})
-    refetch()
-    setName('')
-    setQuotes('')
-  }
-
-  let renderPost
+  let renderPost;
 
   if (posts) {
-    renderPost = posts.map((post: Post) => {
-      const { id, name, quotes } = post
+    renderPost = posts.map((post: TPost, idx: number) => {
       return (
-        <article key={post.id} className="card">
-          <h3>{name}</h3>
-          <p>{quotes}</p>
-          <div className='btns'>
-            <Delete onClick={() => onDeletePost(id)}>Delete</Delete>
-            {isEditing[id] ? (
-              <Update onClick={() => onUpdatePost(post)}>
-                Update
-              </Update>
-            ) : (
-              <Edit onClick={() => onEditPost(id, post)}>
-                Edit
-              </Edit>
-            )}
-          </div>
-        </article>
-      )
-    })
+        <Post
+          post={post}
+          key={post.id}
+          idx={idx}
+          setName={setName}
+          setQuotes={setQuotes}
+          refetch={refetch}
+        />
+      );
+    });
   }
 
   return (
@@ -114,8 +65,10 @@ export default function App() {
             onChange={(e) => setQuotes(e.target.value)}
           />
         </div>
-        <div className='box-button'>
-          <button className='add-button' onClick={onAddPost}>Add Post</button>
+        <div className="box-button">
+          <button className="add-button" onClick={onAddPost}>
+            Add Post
+          </button>
         </div>
       </section>
       <Wrapper>{renderPost}</Wrapper>
@@ -123,7 +76,7 @@ export default function App() {
         <SharedPost />
       </Wrapper>
     </Root>
-  )
+  );
 }
 
 const Root = styled.div`
@@ -138,14 +91,15 @@ const Root = styled.div`
       width: 100px;
     }
 
-    input, textarea {
+    input,
+    textarea {
       flex: 1;
       outline: none;
       border: 5px solid #eee;
     }
 
     input {
-      height: 30px;   
+      height: 30px;
     }
 
     textarea {
@@ -172,7 +126,7 @@ const Root = styled.div`
       }
     }
   }
-`
+`;
 
 const Wrapper = styled.section`
   margin-top: 30px;
@@ -185,7 +139,7 @@ const Wrapper = styled.section`
   .card {
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top,#255c52c2,#021815d1);
+    background: linear-gradient(to top, #255c52c2, #021815d1);
     text-align: center;
     color: #eee;
     border-radius: 5px;
@@ -200,26 +154,7 @@ const Wrapper = styled.section`
       width: 100%;
       height: 50px;
       position: absolute;
-      bottom: 0
+      bottom: 0;
     }
   }
-`
-
-const Delete = styled.button`
-  width: 80px;
-  height: 30px;
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  background: black;
-  color: red;
-  font-weight: bold;
-  margin-right: 5px;
-  &:hover {
-    cursor: pointer
-  }
-`
-const Edit = styled(Delete)`
-  color: green;
-`
-const Update = styled(Edit)``
+`;
